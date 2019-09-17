@@ -8,6 +8,15 @@ body {
   max-height: 50vh;
 }
 
+#dropzone {
+  width: 50%;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed black;
+}
+
 .preview {
   width: 100%;
   overflow: hidden;

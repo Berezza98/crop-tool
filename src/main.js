@@ -10,6 +10,20 @@ const cropper = new CustomCropper(image, {
 
 // UPLOAD FILE
 
+const myDropzone = new Dropzone(
+  "#dropzone",
+  {
+    autoProcessQueue: false,
+    url: "/",
+    maxFiles: 1,
+  }
+);
+
+myDropzone.on("addedfile", function(file) {
+  console.log(file);
+})
+
+
 function verifyFileUpload(file) {
   if (file){
     const fileSizeInMB = file.size / 1000 / 1000;
@@ -34,6 +48,6 @@ function verifyFileUpload(file) {
   }
 }
 
-uploadInput.addEventListener("input", function() {
-  verifyFileUpload(this.files[0]);
-});
+// uploadInput.addEventListener("input", function() {
+//   verifyFileUpload(this.files[0]);
+// });
