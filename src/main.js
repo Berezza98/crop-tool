@@ -2,7 +2,7 @@ import 'cropperjs/dist/cropper.css';
 import Cropper from "cropperjs";
 import Dropzone from "dropzone";
 
-const image = document.getElementById('image');
+const image = document.querySelector('#image');
 const squareButton = document.querySelector("#square-button");
 const landscapeButton = document.querySelector("#landscape-button");
 const portraitButton = document.querySelector("#portrait-button");
@@ -13,6 +13,7 @@ const verticalFlipButton = document.querySelector("#ver-flip");
 const rotationSlider = document.querySelector("#rotate");
 const cropButton = document.querySelector("#crop");
 const resetButton = document.querySelector("#reset");
+const uploadInput = document.querySelector("#upload");
 const currentRorateValue = document.querySelector("#currentRotateValue");
 
 const cropper = new Cropper(image, {
@@ -75,4 +76,34 @@ portraitButton.addEventListener("click", function() {
 
 resetButton.addEventListener("click", function() {
   cropper.reset();
+});
+
+// UPLOAD FILE
+
+function verifyFileUpload(file) {
+  if (file){
+    const fileSizeInMB = file.size / 1000 / 1000;
+    if (fileSizeInMB >= 0.2 && fileSizeInMB <= 40) { // CHECK IMAGE SIZE (now from 0.2MB to 40MB)
+      console.log("File size(in MB): ", fileSizeInMB);
+      var img = new Image();
+      img.src = window.URL.createObjectURL(file);
+  
+      img.onload = function() {
+        const width = this.naturalWidth;
+        const height = this.naturalHeight;
+        if (width > 500 && height > 500) { // CHECK IMAGE RESOLUTION
+          image.src = img.src;
+          console.log("Correct resolution");
+        } else {
+          throw new Error("Image resolution is not correct");
+        }
+      };
+    } else {
+      throw new Error("Image size is not correct");
+    }
+  }
+}
+
+uploadInput.addEventListener("input", function() {
+  verifyFileUpload(this.files[0]);
 });
