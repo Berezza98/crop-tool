@@ -8,6 +8,10 @@ body {
   max-height: 50vh;
 }
 
+#main-canvas {
+  height: 50vh;
+}
+
 #dropzone {
   width: 50%;
   height: 50vh;

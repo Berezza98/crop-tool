@@ -13,7 +13,7 @@
     <div id="dropzone">Dropzone</div>
   </div>
   <div class="image-container">
-    <img id="image" src="./assets/picture.jpg">
+    <canvas id="main-canvas" style="max-width:100%;"></canvas>
   </div>
   <div class="buttons">
     <h1>Aspect ratio</h1>
@@ -46,8 +46,14 @@
   </div>
   <div class="preview-wrapper">
     <h1>Preview</h1>
-    <div class="preview"></div>
+    <canvas id="result-canvas"></canvas>
   </div>
+  <div class="filters">
+      <h1>Filters</h1>
+      <button id="sepia-button">Sepia</button>
+      <button id="vintage-button">Vintage</button>
+    </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js"></script>
   <script src="bundle.js"></script>
 </body>
 </html>

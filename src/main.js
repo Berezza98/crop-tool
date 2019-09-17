@@ -1,12 +1,11 @@
 import Dropzone from "dropzone";
 import CustomCropper from "./CustomCropper";
 
-const image = document.querySelector('#image');
-const uploadInput = document.querySelector("#upload");
+const canvas = document.querySelector('#main-canvas');
+const sepiaButton = document.querySelector("#sepia-button");
+const vintageButton = document.querySelector("#vintage-button");
 
-const cropper = new CustomCropper(image, {
-  preview: document.querySelector(".preview")
-});
+const cropper = new CustomCropper(canvas);
 
 // UPLOAD FILE
 
@@ -21,6 +20,7 @@ const myDropzone = new Dropzone(
 
 myDropzone.on("addedfile", function(file) {
   console.log(file);
+  verifyFileUpload(file);
 })
 
 
@@ -29,15 +29,15 @@ function verifyFileUpload(file) {
     const fileSizeInMB = file.size / 1000 / 1000;
     if (fileSizeInMB >= 0.2 && fileSizeInMB <= 40) { // CHECK IMAGE SIZE (now from 0.2MB to 40MB)
       console.log("File size(in MB): ", fileSizeInMB);
-      var img = new Image();
+      const img = new Image();
       img.src = window.URL.createObjectURL(file);
   
       img.onload = function() {
         const width = this.naturalWidth;
         const height = this.naturalHeight;
         if (width > 500 && height > 500) { // CHECK IMAGE RESOLUTION
-          cropper.replace(img.src);
           console.log("Correct resolution");
+          cropper.replace(img.src);
         } else {
           throw new Error("Image resolution is not correct");
         }
@@ -47,7 +47,3 @@ function verifyFileUpload(file) {
     }
   }
 }
-
-// uploadInput.addEventListener("input", function() {
-//   verifyFileUpload(this.files[0]);
-// });

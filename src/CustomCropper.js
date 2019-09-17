@@ -2,8 +2,8 @@ import 'cropperjs/dist/cropper.css';
 import Cropper from "cropperjs";
 
 export default class CustomCropper extends Cropper{
-  constructor(params) {
-    super(params);
+  constructor(element, options) {
+    super(element, options);
     this.squareButton = document.querySelector("#square-button");
     this.landscapeButton = document.querySelector("#landscape-button");
     this.portraitButton = document.querySelector("#portrait-button");
@@ -23,6 +23,30 @@ export default class CustomCropper extends Cropper{
     //CROP
     this.cropButton.addEventListener("click", () => {
       this.getCroppedCanvas().toBlob((blob) => {
+        const img = new Image();
+        img.src = window.URL.createObjectURL(blob);
+        img.onload = function() {
+          let caman = Caman('#result-canvas', img.src, function () {
+            // FILTERS
+            document.querySelector("#sepia-button").addEventListener("click", () => {
+              if (caman) {
+                const rgbColor = {r: 100, g: 110, b: 70};
+                const colorTemperature = 3500; // e.g. some temperature between 0 and 40,000 K
+                caman.revert(true); // update the canvas' context
+                caman.whiteBalanceRgb(rgbColor); // in case of RGB input
+                caman.whiteBalance(colorTemperature); // in case of color temperature input
+                caman.render(); // render back to canvas with ID #lut-preview
+              }
+            });
+
+            document.querySelector("#vintage-button").addEventListener("click", () => {
+              if (caman) {
+                console.log(caman);
+                caman.vintage().render()
+              }
+            });
+          });
+        }
         console.log(blob);
         // const formData = new FormData();
         // formData.append('croppedImage', blob, 'croppedImage.png');
