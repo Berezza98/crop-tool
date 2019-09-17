@@ -3,6 +3,11 @@ body {
   padding: 0;
 }
 
+.image-container {
+  max-width: 50%;
+  max-height: 50vh;
+}
+
 .preview {
   width: 100%;
   overflow: hidden;
