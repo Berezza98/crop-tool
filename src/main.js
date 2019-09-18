@@ -1,49 +1,125 @@
 import Dropzone from "dropzone";
 import CustomCropper from "./CustomCropper";
+import fileVerificator from "./fileVerificator";
 
-const canvas = document.querySelector('#main-canvas');
+// ratio buttons
+const squareButton = document.querySelector("#square-button");
+const landscapeButton = document.querySelector("#landscape-button");
+const portraitButton = document.querySelector("#portrait-button");
+// zoom buttons
+const scaleIncreaseButton = document.querySelector("#scale-increase");
+const scaleDecreaseButton = document.querySelector("#scale-decrease");
+// flip buttons
+const horizontalFlipButton = document.querySelector("#hor-flip");
+const verticalFlipButton = document.querySelector("#ver-flip");
+// rotate button + element which display rotation value
+const rotationSlider = document.querySelector("#rotate");
+const currentRorateValue = document.querySelector("#currentRotateValue");
+// crop button
+const cropButton = document.querySelector("#crop");
+// reset button
+const resetButton = document.querySelector("#reset");
+// filter buttons
 const sepiaButton = document.querySelector("#sepia-button");
 const vintageButton = document.querySelector("#vintage-button");
+const blackWhiteButton = document.querySelector("#black-white-button");
+// canvases + context of result canvas
+const canvas = document.querySelector('#main-canvas');
+const resultCanvas = document.querySelector("#result-canvas");
+const context = resultCanvas.getContext('2d');
+// cropped Image
+let croppedImage;
 
-const cropper = new CustomCropper(canvas);
+const customCropper = new CustomCropper(canvas);
 
 // UPLOAD FILE
-
 const myDropzone = new Dropzone(
   "#dropzone",
   {
     autoProcessQueue: false,
     url: "/",
     maxFiles: 1,
+    acceptedFiles: "image/jpg, image/jpeg, image/png"
   }
 );
 
 myDropzone.on("addedfile", function(file) {
-  console.log(file);
-  verifyFileUpload(file);
+  if (fileVerificator(file)) {
+    const image = new Image();
+    image.src = window.URL.createObjectURL(file);
+
+    image.onload = function() {
+      customCropper.replace(image.src);
+    };
+  }
 })
 
+//CROP
+cropButton.addEventListener("click", async () => {
+  croppedImage = await customCropper.selectDefinedZone();
+  resultCanvas.width = croppedImage.naturalWidth;
+  resultCanvas.height = croppedImage.naturalHeight;
+  context.drawImage(croppedImage, 0, 0);
+});
 
-function verifyFileUpload(file) {
-  if (file){
-    const fileSizeInMB = file.size / 1000 / 1000;
-    if (fileSizeInMB >= 0.2 && fileSizeInMB <= 40) { // CHECK IMAGE SIZE (now from 0.2MB to 40MB)
-      console.log("File size(in MB): ", fileSizeInMB);
-      const img = new Image();
-      img.src = window.URL.createObjectURL(file);
-  
-      img.onload = function() {
-        const width = this.naturalWidth;
-        const height = this.naturalHeight;
-        if (width > 500 && height > 500) { // CHECK IMAGE RESOLUTION
-          console.log("Correct resolution");
-          cropper.replace(img.src);
-        } else {
-          throw new Error("Image resolution is not correct");
-        }
-      };
-    } else {
-      throw new Error("Image size is not correct");
-    }
-  }
-}
+//FLIP
+horizontalFlipButton.addEventListener("click", () => {
+  customCropper.horizontalFlip();
+});
+
+verticalFlipButton.addEventListener("click", () => {
+  customCropper.verticalFlip();
+});
+
+// ROTATION
+rotationSlider.addEventListener("input", () => {
+  const value = parseInt(rotationSlider.value);
+  customCropper.rotateTo(value);
+  currentRorateValue.innerText = value;
+});
+
+// ZOOM
+scaleIncreaseButton.addEventListener("click", () => {
+  customCropper.zoomIn();
+});
+
+scaleDecreaseButton.addEventListener("click", () => {
+  customCropper.zoomOut();
+});
+
+// ASPECT RATIO
+squareButton.addEventListener("click", () => {
+  customCropper.setSquareRatio();
+});
+
+landscapeButton.addEventListener("click", () => {
+  customCropper.setPortraitRatio();
+});
+
+portraitButton.addEventListener("click", () => {
+  customCropper.setLandscapeRatio();
+});
+
+//RESET
+resetButton.addEventListener("click", () => {
+  this.reset();
+});
+
+// FILTERS
+sepiaButton.addEventListener("click", () => {
+  context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+  context.filter = 'sepia(50%)';
+  context.drawImage(croppedImage, 0, 0);
+});
+
+blackWhiteButton.addEventListener("click", () => {
+  context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+  context.filter = 'grayscale(100%)';
+  context.drawImage(croppedImage, 0, 0);
+});
+
+vintageButton.addEventListener("click", () => {
+  context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+  context.filter = 'grayscale(100%)';
+  context.drawImage(croppedImage, 0, 0);
+});
