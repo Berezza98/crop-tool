@@ -26,25 +26,29 @@ export default class CustomCropper extends Cropper{
         const img = new Image();
         img.src = window.URL.createObjectURL(blob);
         img.onload = function() {
-          let caman = Caman('#result-canvas', img.src, function () {
-            // FILTERS
-            document.querySelector("#sepia-button").addEventListener("click", () => {
-              if (caman) {
-                const rgbColor = {r: 100, g: 110, b: 70};
-                const colorTemperature = 3500; // e.g. some temperature between 0 and 40,000 K
-                caman.revert(true); // update the canvas' context
-                caman.whiteBalanceRgb(rgbColor); // in case of RGB input
-                caman.whiteBalance(colorTemperature); // in case of color temperature input
-                caman.render(); // render back to canvas with ID #lut-preview
-              }
-            });
+          // FILTERS
+          console.log(img, img.naturalWidth, img.naturalHeight);
+          const resultCanvas = document.querySelector("#result-canvas");
+          resultCanvas.width = img.naturalWidth;
+          resultCanvas.height = img.naturalHeight;
+          const context = resultCanvas.getContext('2d');
+          context.drawImage(img, 0, 0);
+          document.querySelector("#sepia-button").addEventListener("click", () => {
+            context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+            context.filter = 'sepia(50%)';
+            context.drawImage(img, 0, 0);
+          });
 
-            document.querySelector("#vintage-button").addEventListener("click", () => {
-              if (caman) {
-                console.log(caman);
-                caman.vintage().render()
-              }
-            });
+          document.querySelector("#black-white-button").addEventListener("click", () => {
+            context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+            context.filter = 'grayscale(100%)';
+            context.drawImage(img, 0, 0);
+          });
+
+          document.querySelector("#vintage-button").addEventListener("click", () => {
+            context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+            context.filter = 'grayscale(100%)';
+            context.drawImage(img, 0, 0);
           });
         }
         console.log(blob);
