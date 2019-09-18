@@ -21,7 +21,7 @@ const cropButton = document.querySelector("#crop");
 const resetButton = document.querySelector("#reset");
 // filter buttons
 const sepiaButton = document.querySelector("#sepia-button");
-const vintageButton = document.querySelector("#vintage-button");
+const contrastButton = document.querySelector("#contrast-button");
 const blackWhiteButton = document.querySelector("#black-white-button");
 // canvases + context of result canvas
 const canvas = document.querySelector('#main-canvas');
@@ -118,8 +118,8 @@ blackWhiteButton.addEventListener("click", () => {
   context.drawImage(croppedImage, 0, 0);
 });
 
-vintageButton.addEventListener("click", () => {
+contrastButton.addEventListener("click", () => {
   context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
-  context.filter = 'grayscale(100%)';
+  context.filter = 'contrast(80%)';
   context.drawImage(croppedImage, 0, 0);
 });
