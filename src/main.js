@@ -102,7 +102,7 @@ portraitButton.addEventListener("click", () => {
 
 //RESET
 resetButton.addEventListener("click", () => {
-  this.reset();
+  customCropper.reset();
 });
 
 // FILTERS
