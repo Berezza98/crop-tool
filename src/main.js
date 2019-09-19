@@ -23,6 +23,7 @@ const resetButton = document.querySelector("#reset");
 const sepiaButton = document.querySelector("#sepia-button");
 const contrastButton = document.querySelector("#contrast-button");
 const blackWhiteButton = document.querySelector("#black-white-button");
+const withoutFiltersButton = document.querySelector("#without-filters-button");
 // canvases + context of result canvas
 const canvas = document.querySelector('#main-canvas');
 const resultCanvas = document.querySelector("#result-canvas");
@@ -121,5 +122,11 @@ blackWhiteButton.addEventListener("click", () => {
 contrastButton.addEventListener("click", () => {
   context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
   context.filter = 'contrast(80%)';
+  context.drawImage(croppedImage, 0, 0);
+});
+
+withoutFiltersButton.addEventListener("click", () => {
+  context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+  context.filter = "none";
   context.drawImage(croppedImage, 0, 0);
 });
