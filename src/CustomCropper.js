@@ -4,6 +4,7 @@ import Cropper from "cropperjs";
 export default class CustomCropper extends Cropper{
   constructor(element, options) {
     super(element, options);
+    this.setSquareRatio();
   }
 
   selectDefinedZone() {
@@ -44,5 +45,10 @@ export default class CustomCropper extends Cropper{
 
   setPortraitRatio() {
     this.setAspectRatio(1.3333333333333);
+  }
+
+  resetToDefaultState() {
+    this.reset();
+    this.setSquareRatio();
   }
 }
