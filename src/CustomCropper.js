@@ -3,7 +3,13 @@ import Cropper from "cropperjs";
 
 export default class CustomCropper extends Cropper{
   constructor(element, options) {
-    super(element, options);
+    let defaultOptions = {
+      autoCropArea : 1,
+      viewMode : 2
+    };
+
+    const mergedOptions = Object.assign({}, defaultOptions, options);
+    super(element, mergedOptions);
     this.setSquareRatio();
   }
 
